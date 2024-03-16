@@ -41,3 +41,4 @@ rl.question('', (input) => {
 // N, K = map(int, input().split())
 // prices = list(map(int, input().split()))
 // print(max_profit(N, K, prices))
+
