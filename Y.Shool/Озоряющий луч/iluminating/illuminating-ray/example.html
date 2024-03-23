@@ -186,78 +186,222 @@
 	</script>
 
 	<script>
-		const query = document.getElementById('site-search');
-		const root = document.getElementById('root');
+						// const query = document.getElementById('site-search');
+						// const root = document.getElementById('root');
 
-		query.addEventListener('input', () => {
-			CSS.highlights.clear();
-			const str = query.value.trim().toLowerCase();
-			if (!str) {
-				return;
-			}
+						// query.addEventListener('input', () => {
+						// 	CSS.highlights.clear();
+						// 	const str = query.value.trim().toLowerCase();
+						// 	if (!str) {
+						// 		return;
+						// 	}
 
-			const treeWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+						// 	const treeWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
 
-			const textNodes = [];
-			let currentNode = treeWalker.nextNode();
-			while (currentNode) {
-				textNodes.push(currentNode);
-				currentNode = treeWalker.nextNode();
-			}
+						// 	const textNodes = [];
+						// 	let currentNode = treeWalker.nextNode();
+						// 	while (currentNode) {
+						// 		textNodes.push(currentNode);
+						// 		currentNode = treeWalker.nextNode();
+						// 	}
 
-			const doneArr = [
-				textNodes.map((arr) => {
-					return arr.textContent;
-				}),
-			];
+						// 	console.log(textNodes);
+						// 	const ranges = textNodes.map((node) => {
+						// 		const text = node.textContent.toLowerCase();
+						// 		const indices = [];
+						// 		let startPos = 0;
+						// 		while (startPos < text.length) {
+						// 			const index = text.indexOf(str, startPos);
+						// 			if (index === -1) break;
+						// 			indices.push(index);
+						// 			startPos = index + str.length;
+						// 		}
 
-			const result = doneArr.flat().join('').trim();
+						// 		return indices.map((index) => {
+						// 			const range = new Range();
+						// 			range.setStart(node, index);
+						// 			range.setEnd(node, index + str.length);
+						// 			return range;
+						// 		});
+						// 	});
 
+						// 	const searchResultsHighlight = new Highlight(...ranges.flat());
 
+						// 	CSS.highlights.set('search-results', searchResultsHighlight);
+						// });
 
-			//как я пытался решить то что у нас разные строки, к решению не пришел 
+						//--------------------------------------------------------------------------------------------------------------
 
-			// const ranges = textNodes.map((node) => {
-			// 	const text = result;
-			// 	const indices = [];
-			// 	let startPos = 0;
-			// 	while (startPos < text.length) {
-			// 		const index = text.indexOf(str, startPos);
-			// 		if (index === -1) break;
-			// 		indices.push(index);
-			// 		startPos = index + str.length;
-			// 	}
+						// function createVirtualTextNode(root) {
+						// 	const treeWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+						// 	let currentNode = treeWalker.nextNode();
+						// 	let combinedText = '';
 
-			// 	return indices.map((index) => {
-			// 		const range = new Range();
-			// 		range.setStart(node, index);
-			// 		range.setEnd(node, index + str.length);
-			// 		return range;
-			// 	});
-			// });
+						// 	while (currentNode) {
+						// 		combinedText += currentNode.textContent;
+						// 		currentNode = treeWalker.nextNode();
+						// 	}
 
-			const ranges = textNodes.map((node) => {
-				const text = node.textContent.toLowerCase();
-				const indices = [];
-				let startPos = 0;
-				while (startPos < text.length) {
-					const index = text.indexOf(str, startPos);
-					if (index === -1) break;
-					indices.push(index);
-					startPos = index + str.length;
-				}
+						// 	// Создаем элемент div для содержания "виртуального" текстового узла
+						// 	const virtualTextContainer = document.createElement('div');
+						// 	virtualTextContainer.style.display = 'none'; // Скрываем контейнер
 
-				return indices.map((index) => {
-					const range = new Range();
-					range.setStart(node, index);
-					range.setEnd(node, index + str.length);
-					return range;
-				});
-			});
+						// 	// Создаем "виртуальный" текстовый узел и добавляем его в контейнер
+						// 	const virtualTextNode = document.createTextNode(combinedText);
+						// 	virtualTextContainer.appendChild(virtualTextNode);
 
-			const searchResultsHighlight = new Highlight(...ranges.flat());
+						// 	// Добавляем контейнер с "виртуальным" текстовым узлом в DOM
+						// 	root.appendChild(virtualTextContainer);
 
-			CSS.highlights.set('search-results', searchResultsHighlight);
-		});
+						// 	return virtualTextNode;
+						// }
+
+						// const query = document.getElementById('site-search');
+						// const root = document.getElementById('root');
+
+						// query.addEventListener('input', () => {
+						// 	const previousVirtualTextContainer = root.querySelector(
+						// 		'.virtual-text-container'
+						// 	);
+						// 	if (previousVirtualTextContainer) {
+						// 		root.removeChild(previousVirtualTextContainer);
+						// 	}
+
+						// 	CSS.highlights.clear();
+						// 	const str = query.value.trim().toLowerCase();
+						// 	if (!str) {
+						// 		return;
+						// 	}
+
+						// 	// Создаем "виртуальный" текстовый узел
+						// 	const virtualTextNode = createVirtualTextNode(root);
+
+						// 	// Поиск и выделение в "виртуальном" текстовом узле
+						// 	const indices = [];
+						// 	let startPos = 0;
+						// 	while (startPos < virtualTextNode.textContent.length) {
+						// 		const index = virtualTextNode.textContent.indexOf(str, startPos);
+						// 		if (index === -1) break;
+						// 		indices.push(index);
+						// 		startPos = index + str.length;
+						// 	}
+
+						// 	// Создаем диапазоны для каждого найденного совпадения
+						// 	const ranges = indices.map((index) => {
+						// 		const range = document.createRange();
+						// 		// Здесь нужно определить, в каком текстовом узле находится совпадение
+						// 		// Это может быть сложно, если текст разделен на несколько узлов
+						// 		// Вам может потребоваться более сложная логика для определения этого
+						// 		// В данном примере мы просто устанавливаем начало и конец диапазона в одном узле
+						// 		range.setStart(virtualTextNode, index);
+						// 		range.setEnd(virtualTextNode, index + str.length);
+						// 		return range;
+						// 	});
+
+						// 	const searchResultsHighlight = new Highlight(...ranges);
+						// 	CSS.highlights.set('search-results', searchResultsHighlight);
+						// });
+
+						// Получаем ссылку на элемент root и другие элементы
+						// Глобальная переменная для хранения деталей тестов
+						// Глобальная переменная для хранения деталей тестов
+						let testsDetail = [];
+
+						// Обработчик события onSolutionReady
+						document
+							.getElementById('root')
+							.addEventListener('onSolutionReady', (event) => {
+								const { detail } = event;
+								testsDetail = detail; // Сохраняем детали тестов в глобальную переменную
+
+								// Остальная часть вашего кода для обработки события onSolutionReady...
+							});
+
+						// Получаем ссылку на элементы
+						const root = document.getElementById('root');
+						const siteSearch = document.getElementById('site-search');
+						const selectTest = document.getElementById('tests-select');
+
+						// Функция для выделения текста
+						// Функция для выделения текста
+						// Функция для выделения текста
+						function highlight() {
+							// Получаем текущий выбранный тест
+							const selectedTest = selectTest.value;
+							const test = testsDetail.find((t) => t.id === selectedTest);
+
+							// Получаем текст для поиска
+							const searchText = siteSearch.value.toLowerCase();
+
+							// Очищаем предыдущие выделения
+							const highlightedElements = document.querySelectorAll('.search-results');
+							highlightedElements.forEach((el) =>
+								el.classList.remove('search-results')
+							);
+
+							// Выделяем текст, соответствующий запросу
+							// Функция для выделения текста
+				// Функция для выделения текста
+		function highlight() {
+		    // Получаем текущий выбранный тест
+		    const selectedTest = selectTest.value;
+		    const test = testsDetail.find(t => t.id === selectedTest);
+
+		    // Получаем текст для поиска
+		    const searchText = siteSearch.value.toLowerCase();
+
+		    // Очищаем предыдущие выделения
+		    const highlightedElements = document.querySelectorAll('.search-results');
+		    highlightedElements.forEach(el => el.classList.remove('search-results'));
+
+		    // Выделяем текст, соответствующий запросу
+		    if (searchText) {
+		        const regex = new RegExp(searchText, 'gi');
+		        const textNodes = getTextNodesIn(root);
+		        textNodes.forEach(node => {
+		            const parent = node.parentNode;
+		            if (parent) {
+		                const matches = node.nodeValue.match(regex);
+		                if (matches) {
+		                    const parts = node.nodeValue.split(regex);
+		                    // Создаем новый текстовый узел для первой части текста
+		                    const newTextNode = document.createTextNode(parts.shift());
+		                    parent.insertBefore(newTextNode, node);
+		                    // Для каждого совпадения создаем новый элемент span и вставляем его в DOM
+		                    parts.forEach(part => {
+		                        const span = document.createElement('span');
+		                        span.className = 'search-results';
+		                        span.textContent = part;
+		                        parent.insertBefore(span, newTextNode.nextSibling);
+		                        // Создаем новый текстовый узел для оставшейся части текста
+		                        const nextTextNode = document.createTextNode(parts.join(part));
+		                        parent.insertBefore(nextTextNode, span.nextSibling);
+		                    });
+		                    // Удаляем исходный текстовый узел
+		                    parent.removeChild(node);
+		                }
+		            }
+		        });
+		    }
+		}
+
+		// Функция для получения всех текстовых узлов внутри элемента
+		function getTextNodesIn(node) {
+		    let textNodes = [];
+		    if (node.nodeType === 3) {
+		        textNodes.push(node);
+		    } else {
+		        const children = node.childNodes;
+		        for (let i = 0; i < children.length; i++) {
+		            textNodes.push(...getTextNodesIn(children[i]));
+		        }
+		    }
+		    return textNodes;
+		}
+	}
+
+						// Добавляем обработчики событий
+						siteSearch.addEventListener('input', highlight);
+						selectTest.addEventListener('change', highlight);
 	</script>
 </html>
