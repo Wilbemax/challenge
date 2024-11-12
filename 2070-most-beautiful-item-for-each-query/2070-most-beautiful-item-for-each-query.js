@@ -25,6 +25,30 @@ var maximumBeauty = function (items, queries) {
     });
     return res
 
+    // time limite
 
+    // const res = []
+
+    // for (let i = 0; i < queries.length; i++) {
+    //     let maximumBeautyIndex = -1
+    //     for (let j = 0; j < items.length; j++) {
+            
+    //         if (items[j][0] <= queries[i]){
+    //             if (maximumBeautyIndex === -1){
+    //                 maximumBeautyIndex = j
+    //             } else if (items[maximumBeautyIndex][1] < items[j][1]){
+    //                 maximumBeautyIndex = j
+    //             }
+               
+    //         }
+        
+    //     }
+    //     if (maximumBeautyIndex === -1) res.push(0)
+    //     else res.push(items[maximumBeautyIndex][1])
+           
+    // }
+    // return res
+
+    
 };
 
