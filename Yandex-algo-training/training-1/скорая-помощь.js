@@ -10,6 +10,4 @@ const lines = fileContent
 
 const [k1, m, k2, p2, n2] = lines[0].split(" ").map(Number)
 
-console.log(k1, m, k2, p2, n2)
-
 fs.writeFileSync('output.txt', 'da');
